@@ -13,8 +13,6 @@
     <string name="email_chooser">Envoyer e-mail...</string>
     <string name="about">Blockchain Merchant %1$s\n©%2$s Blockchain.info</string>
     <string name="wallet_download">Gratuit: Votre portfeuille Bitcoin</string>
-    
-    <string name="wallet_download">Get a free Bitcoin Wallet</string>
     <string name="tab_settings">Paramètres</string>
     <string name="tab_payment">Paiement</string>
     <string name="tab_transactions">Transactions</string>

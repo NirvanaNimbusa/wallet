@@ -173,7 +173,7 @@ public class TransactionsFragment extends ListFragment	{
         	
         	if(receiving_address.length() > 0) {
 
-                WalletReceipts wallet = new WalletReceipts(receiving_address, 10);
+                Wallet wallet = new Wallet(receiving_address, 10);
                 String json = null;
                 try {
                     json = IOUtils.toString(new URL(wallet.getUrl()), "UTF-8");
