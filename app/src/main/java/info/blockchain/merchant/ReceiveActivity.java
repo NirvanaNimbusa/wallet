@@ -144,7 +144,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener{
             write2NFC("bitcoin:" + receivingAddress);
         }
     }
-
+q
     private void generateQRCode(final String uri) {
 
         new AsyncTask<Void, Void, Bitmap>(){
@@ -272,6 +272,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener{
 
             final String addr = intent.getStringExtra("payment_address");
             final long paymentAmount = intent.getLongExtra("payment_amount", 0L);
+            final boolean isRBF = intent.getBooleanExtra("is_rbf", false);
 
             // underpayment
             if(paymentAmount < ExpectedIncoming.getInstance().getBTC().get(addr))    {
@@ -345,6 +346,25 @@ public class ReceiveActivity extends Activity implements View.OnClickListener{
             // expected amount
             else    {
                 onPaymentReceived(addr, -1L);
+            }
+
+            if(isRBF)    {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
+                builder.setTitle(R.string.app_name);
+                builder.setMessage(R.string.incoming_rbf).setCancelable(true);
+                AlertDialog alert = builder.create();
+
+                alert.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.prompt_ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        dialog.dismiss();
+
+                    }
+                });
+
+                alert.show();
+
             }
 
         }
