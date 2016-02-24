@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -31,7 +32,10 @@ public class WebSocketHandler {
     private final long pongTimeout = 5000L;//pong timeout after 5 seconds
     private boolean pingPongSuccess = false;
 
+    private static final long RBF_THRESHOLD = BigInteger.valueOf(0xffffffffL).subtract(BigInteger.ONE).longValue();
+
     public WebSocketHandler() {
+        ;
     }
 
     public void start() {
@@ -157,6 +161,17 @@ public class WebSocketHandler {
 
                                         long value = 0L;
 
+                                        boolean isRBF = false;
+                                        if (objX.has("inputs")) {
+                                            JSONArray inputs = objX.getJSONArray("inputs");
+                                            for(int i = 0; i < inputs.length(); i++)   {
+                                                if(inputs.getJSONObject(i).has("sequence") && inputs.getJSONObject(i).getLong("sequence") < RBF_THRESHOLD)    {
+                                                    isRBF = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+
                                         String foundAddr = null;
                                         long txValue = 0L;
                                         if (objX.has("out")) {
@@ -178,7 +193,7 @@ public class WebSocketHandler {
                                         }
 
                                         if (txValue > 0L) {
-                                            webSocketListener.onIncomingPayment(foundAddr, txValue);
+                                            webSocketListener.onIncomingPayment(foundAddr, txValue, isRBF);
                                         }
                                     }
                                 } catch (Exception e) {
