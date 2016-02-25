@@ -144,7 +144,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener{
             write2NFC("bitcoin:" + receivingAddress);
         }
     }
-q
+
     private void generateQRCode(final String uri) {
 
         new AsyncTask<Void, Void, Bitmap>(){
